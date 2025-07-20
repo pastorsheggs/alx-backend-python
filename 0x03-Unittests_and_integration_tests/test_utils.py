@@ -27,7 +27,10 @@ class TestAccessNestedMap(unittest.TestCase):
         """Test that KeyError is raised with correct message"""
         with self.assertRaises(KeyError) as context:
             access_nested_map(nested_map, path)
-        self.assertEqual(str(context.exception), f"'{path[-1]}'")
+        self.assertEqual(
+            str(context.exception),
+            f"'{path[-1]}'"
+        )
 
 
 class TestGetJson(unittest.TestCase):
@@ -38,7 +41,7 @@ class TestGetJson(unittest.TestCase):
         ("http://holberton.io", {"payload": False}),
     ])
     def test_get_json(self, test_url, test_payload):
-        """Test get_json returns the correct payload and calls requests.get once"""
+        """Test get_json returns correct payload and calls requests.get once"""
         mock_response = Mock()
         mock_response.json.return_value = test_payload
 
