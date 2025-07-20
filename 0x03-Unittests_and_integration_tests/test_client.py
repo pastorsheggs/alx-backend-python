@@ -18,19 +18,21 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
     """Integration test for GithubOrgClient.public_repos"""
 
     @classmethod
-    def setUpClass(cls):
-        """Set up mock patcher for requests.get"""
-        cls.get_patcher = patch("requests.get")
-        cls.mock_get = cls.get_patcher.start()
+def setUpClass(cls):
+    """Set up mock patcher for requests.get"""
+    cls.get_patcher = patch("requests.get")
+    cls.mock_get = cls.get_patcher.start()
 
-        def side_effect(url):
-            if url == f"https://api.github.com/orgs/{fixtures.org_payload['login']}":
-                return MockResponse(fixtures.org_payload)
-            if url == fixtures.org_payload["repos_url"]:
-                return MockResponse(fixtures.repos_payload)
-            return None
+    def side_effect(url):
+        org_url = f"https://api.github.com/orgs/{fixtures.org_payload['login']}"
+        if url == org_url:
+            return MockResponse(fixtures.org_payload)
+        if url == fixtures.org_payload["repos_url"]:
+            return MockResponse(fixtures.repos_payload)
+        return None
 
-        cls.mock_get.side_effect = side_effect
+    cls.mock_get.side_effect = side_effect
+
 
     @classmethod
     def tearDownClass(cls):
