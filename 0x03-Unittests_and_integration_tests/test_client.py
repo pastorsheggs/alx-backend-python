@@ -1,8 +1,10 @@
+#!/usr/bin/env python3
 import unittest
 from unittest.mock import patch
 from parameterized import parameterized_class
 from client import GithubOrgClient
 import fixtures
+
 
 @parameterized_class([
     {
@@ -24,7 +26,7 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
         def side_effect(url):
             if url == f"https://api.github.com/orgs/{fixtures.org_payload['login']}":
                 return MockResponse(fixtures.org_payload)
-            elif url == fixtures.org_payload["repos_url"]:
+            if url == fixtures.org_payload["repos_url"]:
                 return MockResponse(fixtures.repos_payload)
             return None
 
@@ -44,12 +46,14 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
         """Test public_repos with license filter"""
         client = GithubOrgClient(self.org_payload["login"])
         self.assertEqual(
-            client.public_repos(license="apache-2.0"), self.apache2_repos
+            client.public_repos(license="apache-2.0"),
+            self.apache2_repos
         )
 
 
 class MockResponse:
     """Mock response class for .json()"""
+
     def __init__(self, payload):
         self._payload = payload
 
